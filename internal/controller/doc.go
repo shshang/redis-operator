@@ -4,4 +4,4 @@ will create a redis failover, containing a group of redis and a group
 of sentinels managing the redis.
 */
 
-package redisfailover
+package controller

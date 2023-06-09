@@ -72,7 +72,7 @@ func (r *RedisFailoverReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	r.V
+	redisFailover.
 
 	return ctrl.Result{}, nil
 }

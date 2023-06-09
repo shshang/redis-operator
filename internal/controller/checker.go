@@ -1,4 +1,4 @@
-package redisfailover
+package controller
 
 import (
 	"errors"
