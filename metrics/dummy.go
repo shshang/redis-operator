@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	koopercontroller "github.com/spotahome/kooper/v2/controller"
+	koopercontroller "github.com/shshang/kooper/v2/controller"
 )
 
 // Dummy is a handy instnce of a dummy instrumenter, most of the times it will be used on tests.

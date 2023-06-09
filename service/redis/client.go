@@ -10,11 +10,13 @@ import (
 	"strings"
 
 	rediscli "github.com/go-redis/redis/v8"
-	"github.com/spotahome/redis-operator/log"
-	"github.com/spotahome/redis-operator/metrics"
+	"github.com/shshang/redis-operator/log"
+	"github.com/shshang/redis-operator/metrics"
+	//"github.com/shshang/redis-operator/log"
+	//"github.com/shshang/redis-operator/metrics"
 )
 
-// Client defines the functions neccesary to connect to redis and sentinel to get or set what we nned
+// Client defines the functions neccesary to connect to redis and sentinel to get or set what we need
 type Client interface {
 	GetNumberSentinelsInMemory(ip string) (int32, error)
 	GetNumberSentinelSlavesInMemory(ip string) (int32, error)

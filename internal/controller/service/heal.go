@@ -5,10 +5,10 @@ import (
 	"sort"
 	"strconv"
 
-	redisfailoverv1 "github.com/spotahome/redis-operator/api/redisfailover/v1"
-	"github.com/spotahome/redis-operator/log"
-	"github.com/spotahome/redis-operator/service/k8s"
-	"github.com/spotahome/redis-operator/service/redis"
+	redisfailoverv1 "github.com/shshang/redis-operator/api/redisfailover/v1"
+	"github.com/shshang/redis-operator/log"
+	"github.com/shshang/redis-operator/service/k8s"
+	"github.com/shshang/redis-operator/service/redis"
 	v1 "k8s.io/api/core/v1"
 )
 

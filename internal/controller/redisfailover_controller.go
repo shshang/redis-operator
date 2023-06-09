@@ -18,15 +18,15 @@ package controller
 
 import (
 	"context"
-	rfservice "github.com/spotahome/redis-operator/operator/redisfailover/service"
+	rfservice "github.com/shshang/redis-operator/operator/redisfailover/service"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	"github.com/spotahome/redis-operator/metrics"
-	"github.com/spotahome/redis-operator/service/k8s"
+	"github.com/shshang/redis-operator/metrics"
+	"github.com/shshang/redis-operator/service/k8s"
 	databasesv1 "shshang/redis-operator/api/v1"
 )
 
@@ -87,20 +87,20 @@ func (r *RedisFailoverReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 
 	if err := r.Ensure(rf, labels, oRefs, r.mClient); err != nil {
 		r.mClient.SetClusterError(rf.Namespace, rf.Name)
-		return err
+		return ctrl.Result{}, err
 	}
 
 	if err := r.CheckAndHeal(rf); err != nil {
 		r.mClient.SetClusterError(rf.Namespace, rf.Name)
-		return err
+		return ctrl.Result{}, err
 	}
 
 	r.mClient.SetClusterOK(rf.Namespace, rf.Name)
-	return nil
+	return ctrl.Result{}, nil
 
 	}
 
-	return ctrl.Result{}, nil
+	//return ctrl.Result{}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.
