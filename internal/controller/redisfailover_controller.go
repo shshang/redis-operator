@@ -72,7 +72,33 @@ func (r *RedisFailoverReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	redisFailover.
+	// Is this check still valid?
+	//if err := rf.Validate(); err != nil {
+	//	r.mClient.SetClusterError(rf.Namespace, rf.Name)
+	//	return err
+	//}
+
+	// Create owner refs so the objects manager by this handler have ownership to the
+	// received RF.
+	oRefs := r.createOwnerReferences(rf)
+
+	// Create the labels every object derived from this need to have.
+	labels := r.getLabels(rf)
+
+	if err := r.Ensure(rf, labels, oRefs, r.mClient); err != nil {
+		r.mClient.SetClusterError(rf.Namespace, rf.Name)
+		return err
+	}
+
+	if err := r.CheckAndHeal(rf); err != nil {
+		r.mClient.SetClusterError(rf.Namespace, rf.Name)
+		return err
+	}
+
+	r.mClient.SetClusterOK(rf.Namespace, rf.Name)
+	return nil
+
+	}
 
 	return ctrl.Result{}, nil
 }

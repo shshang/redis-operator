@@ -10,7 +10,7 @@ import (
 )
 
 // UpdateRedisesPods if the running version of pods are equal to the statefulset one
-func (r *RedisFailoverHandler) UpdateRedisesPods(rf *redisfailoverv1.RedisFailover) error {
+func (r *RedisFailoverReconciler) UpdateRedisesPods(rf *redisfailoverv1.RedisFailover) error {
 	redises, err := r.rfChecker.GetRedisesIPs(rf)
 	if err != nil {
 		return err
@@ -84,7 +84,7 @@ func (r *RedisFailoverHandler) UpdateRedisesPods(rf *redisfailoverv1.RedisFailov
 
 // CheckAndHeal runs verifcation checks to ensure the RedisFailover is in an expected and healthy state.
 // If the checks do not match up to expectations, an attempt will be made to "heal" the RedisFailover into a healthy state.
-func (r *RedisFailoverHandler) CheckAndHeal(rf *redisfailoverv1.RedisFailover) error {
+func (r *RedisFailoverReconciler) CheckAndHeal(rf *redisfailoverv1.RedisFailover) error {
 	if rf.Bootstrapping() {
 		return r.checkAndHealBootstrapMode(rf)
 	}
@@ -230,7 +230,7 @@ func (r *RedisFailoverHandler) CheckAndHeal(rf *redisfailoverv1.RedisFailover) e
 	return r.checkAndHealSentinels(rf, sentinels)
 }
 
-func (r *RedisFailoverHandler) checkAndHealBootstrapMode(rf *redisfailoverv1.RedisFailover) error {
+func (r *RedisFailoverReconciler) checkAndHealBootstrapMode(rf *redisfailoverv1.RedisFailover) error {
 
 	if !r.rfChecker.IsRedisRunning(rf) {
 		setRedisCheckerMetrics(r.mClient, "redis", rf.Namespace, rf.Name, metrics.REDIS_REPLICA_MISMATCH, metrics.NOT_APPLICABLE, errors.New("not all replicas running"))
@@ -281,7 +281,7 @@ func (r *RedisFailoverHandler) checkAndHealBootstrapMode(rf *redisfailoverv1.Red
 	return nil
 }
 
-func (r *RedisFailoverHandler) applyRedisCustomConfig(rf *redisfailoverv1.RedisFailover) error {
+func (r *RedisFailoverReconciler) applyRedisCustomConfig(rf *redisfailoverv1.RedisFailover) error {
 	redises, err := r.rfChecker.GetRedisesIPs(rf)
 	if err != nil {
 		return err
@@ -294,7 +294,7 @@ func (r *RedisFailoverHandler) applyRedisCustomConfig(rf *redisfailoverv1.RedisF
 	return nil
 }
 
-func (r *RedisFailoverHandler) checkAndHealSentinels(rf *redisfailoverv1.RedisFailover, sentinels []string) error {
+func (r *RedisFailoverReconciler) checkAndHealSentinels(rf *redisfailoverv1.RedisFailover, sentinels []string) error {
 	for _, sip := range sentinels {
 		err := r.rfChecker.CheckSentinelNumberInMemory(sip, rf)
 		setRedisCheckerMetrics(r.mClient, "sentinel", rf.Namespace, rf.Name, metrics.SENTINEL_NUMBER_IN_MEMORY_MISMATCH, sip, err)
