@@ -18,19 +18,32 @@ package controller
 
 import (
 	"context"
+	rfservice "github.com/spotahome/redis-operator/operator/redisfailover/service"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
+	"github.com/spotahome/redis-operator/metrics"
+	"github.com/spotahome/redis-operator/service/k8s"
 	databasesv1 "shshang/redis-operator/api/v1"
 )
 
 // RedisFailoverReconciler reconciles a RedisFailover object
+// RedisFailoverReconciler is very much like RedisFailoverHandler
+
 type RedisFailoverReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
+
+	config     Config
+	k8sservice k8s.Service
+	rfService  rfservice.RedisFailoverClient
+	rfChecker  rfservice.RedisFailoverCheck
+	rfHealer   rfservice.RedisFailoverHeal
+	mClient    metrics.Recorder
+	logger     log.Logger
 }
 
 //+kubebuilder:rbac:groups=databases.spotahome.com,resources=redisfailovers,verbs=get;list;watch;create;update;patch;delete
@@ -47,9 +60,19 @@ type RedisFailoverReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.14.4/pkg/reconcile
 func (r *RedisFailoverReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	log := log.FromContext(ctx)
 
 	// TODO(user): your logic here
+	var redisFailover databasesv1.RedisFailover
+	if err := r.Get(ctx, req.NamespacedName, &redisFailover); err != nil {
+		log.Error(err, "unable to fetch CronJob")
+		// we'll ignore not-found errors, since they can't be fixed by an immediate
+		// requeue (we'll need to wait for a new notification), and we can get them
+		// on deleted requests.
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	r.V
 
 	return ctrl.Result{}, nil
 }
