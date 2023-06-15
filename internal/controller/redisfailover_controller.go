@@ -18,16 +18,13 @@ package controller
 
 import (
 	"context"
-	rfservice "github.com/shshang/redis-operator/operator/redisfailover/service"
-
+	"github.com/shshang/redis-operator/log"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/log"
+	//"sigs.k8s.io/controller-runtime/pkg/log"
 
-	"github.com/shshang/redis-operator/metrics"
-	"github.com/shshang/redis-operator/service/k8s"
-	databasesv1 "shshang/redis-operator/api/v1"
+	databasesv1 "github.com/shshang/redis-operator/api/v1"
 )
 
 // RedisFailoverReconciler reconciles a RedisFailover object
@@ -36,14 +33,7 @@ import (
 type RedisFailoverReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
-
-	config     Config
-	k8sservice k8s.Service
-	rfService  rfservice.RedisFailoverClient
-	rfChecker  rfservice.RedisFailoverCheck
-	rfHealer   rfservice.RedisFailoverHeal
-	mClient    metrics.Recorder
-	logger     log.Logger
+	log    log.Logger
 }
 
 //+kubebuilder:rbac:groups=databases.spotahome.com,resources=redisfailovers,verbs=get;list;watch;create;update;patch;delete
@@ -60,47 +50,10 @@ type RedisFailoverReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.14.4/pkg/reconcile
 func (r *RedisFailoverReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := log.FromContext(ctx)
+	//log := r.log.FromContext(ctx, r.logger)
 
-	// TODO(user): your logic here
-	var redisFailover databasesv1.RedisFailover
-	if err := r.Get(ctx, req.NamespacedName, &redisFailover); err != nil {
-		log.Error(err, "unable to fetch CronJob")
-		// we'll ignore not-found errors, since they can't be fixed by an immediate
-		// requeue (we'll need to wait for a new notification), and we can get them
-		// on deleted requests.
-		return ctrl.Result{}, client.IgnoreNotFound(err)
-	}
+	r.logger.Errorf("Unable to compile label whitelist regex '%s', ignoring it.", regex)
 
-	// Is this check still valid?
-	//if err := rf.Validate(); err != nil {
-	//	r.mClient.SetClusterError(rf.Namespace, rf.Name)
-	//	return err
-	//}
-
-	// Create owner refs so the objects manager by this handler have ownership to the
-	// received RF.
-	oRefs := r.createOwnerReferences(rf)
-
-	// Create the labels every object derived from this need to have.
-	labels := r.getLabels(rf)
-
-	if err := r.Ensure(rf, labels, oRefs, r.mClient); err != nil {
-		r.mClient.SetClusterError(rf.Namespace, rf.Name)
-		return ctrl.Result{}, err
-	}
-
-	if err := r.CheckAndHeal(rf); err != nil {
-		r.mClient.SetClusterError(rf.Namespace, rf.Name)
-		return ctrl.Result{}, err
-	}
-
-	r.mClient.SetClusterOK(rf.Namespace, rf.Name)
-	return ctrl.Result{}, nil
-
-	}
-
-	//return ctrl.Result{}, nil
 }
 
 // SetupWithManager sets up the controller with the Manager.

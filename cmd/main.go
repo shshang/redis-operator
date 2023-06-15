@@ -31,8 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	databasesv1 "shshang/redis-operator/api/v1"
-	"shshang/redis-operator/internal/controller"
+	databasesv1 "github.com/shshang/redis-operator/api/v1"
+	"github.com/shshang/redis-operator/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 

@@ -30,7 +30,7 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	databasesv1 "shshang/redis-operator/api/v1"
+	databasesv1 "github.com/shshang/redis-operator/api/v1"
 	//+kubebuilder:scaffold:imports
 )
 

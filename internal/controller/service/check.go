@@ -9,7 +9,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 
-	redisfailoverv1 "github.com/shshang/redis-operator/api/redisfailover/v1"
+	redisfailoverv1 "github.com/shshang/redis-operator/api/v1"
 	"github.com/shshang/redis-operator/log"
 	"github.com/shshang/redis-operator/metrics"
 	"github.com/shshang/redis-operator/service/k8s"

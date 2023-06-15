@@ -6,7 +6,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
 
-	redisfailoverv1 "github.com/shshang/redis-operator/api/redisfailover/v1"
+	redisfailoverv1 "github.com/shshang/redis-operator/api/v1"
 	redisfailoverclientset "github.com/shshang/redis-operator/client/k8s/clientset/versioned"
 	"github.com/shshang/redis-operator/log"
 	"github.com/shshang/redis-operator/metrics"

@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"github.com/shshang/redis-operator/internal/controller/util"
 	"regexp"
 
-	redisfailoverv1 "github.com/shshang/redis-operator/api/redisfailover/v1"
-	"github.com/shshang/redis-operator/operator/redisfailover/util"
+	redisfailoverv1 "github.com/shshang/redis-operator/api/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -15,7 +15,8 @@ const (
 
 var (
 	defaultLabels = map[string]string{
-		rfLabelManagedByKey: operatorName,
+		rfLabelManagedByKey: "operatorName",
+		//rfLabelManagedByKey: operatorName,
 	}
 )
 
@@ -47,7 +48,7 @@ func (r *RedisFailoverReconciler) getLabels(rf *redisfailoverv1.RedisFailover) m
 	return util.MergeLabels(defaultLabels, dynLabels, filteredCustomLabels)
 }
 
-func (w *RedisFailoverReconciler) createOwnerReferences(rf *redisfailoverv1.RedisFailover) []metav1.OwnerReference {
+func (r *RedisFailoverReconciler) createOwnerReferences(rf *redisfailoverv1.RedisFailover) []metav1.OwnerReference {
 	rfvk := redisfailoverv1.VersionKind(redisfailoverv1.RFKind)
 	return []metav1.OwnerReference{
 		*metav1.NewControllerRef(rf, rfvk),
