@@ -49,11 +49,23 @@ type RedisFailoverReconciler struct {
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.14.4/pkg/reconcile
-func (r *RedisFailoverReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *RedisFailoverReconciler) Reconcile(ctx context.Context, request ctrl.Request) (ctrl.Result, error) {
 	//log := r.log.FromContext(ctx, r.logger)
 
-	r.logger.Errorf("Unable to compile label whitelist regex '%s', ignoring it.", regex)
+	rf := databasesv1.RedisFailover{}
+	err := r.Client.Get(context.TODO(), request.NamespacedName, &rf)
 
+	if err != nil {
+		if apiErrors.IsNotFound(err) {
+			// Request object not found, could have been deleted after reconcile request.
+			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
+			// Return and don't requeue
+			return result.OK()
+		}
+		r.log.Errorf("Error reconciling MongoDB resource: %s", err)
+		// Error reading the object - requeue the request.
+		return result.Failed()
+	}
 }
 
 // SetupWithManager sets up the controller with the Manager.
