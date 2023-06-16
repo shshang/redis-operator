@@ -3,6 +3,7 @@ package reconciliation
 import (
 	"context"
 	"fmt"
+	"github.com/shshang/redis-operator/pkg/util"
 	"regexp"
 	"time"
 
@@ -11,7 +12,6 @@ import (
 
 	redisfailoverv1 "github.com/shshang/redis-operator/api/v1"
 	rfservice "github.com/shshang/redis-operator/internal/controller/service"
-	"github.com/shshang/redis-operator/internal/controller/util"
 	"github.com/shshang/redis-operator/log"
 	"github.com/shshang/redis-operator/metrics"
 	"github.com/shshang/redis-operator/service/k8s"

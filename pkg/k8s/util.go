@@ -3,7 +3,7 @@ package k8s
 import (
 	"fmt"
 
-	redisfailoverv1 "github.com/shshang/redis-operator/api/redisfailover/v1"
+	redisfailoverv1 "github.com/shshang/redis-operator/api/v1"
 	"github.com/shshang/redis-operator/metrics"
 	"k8s.io/apimachinery/pkg/api/errors"
 )

@@ -12,8 +12,8 @@ import (
 	redisfailoverv1 "github.com/shshang/redis-operator/api/v1"
 	"github.com/shshang/redis-operator/log"
 	"github.com/shshang/redis-operator/metrics"
-	"github.com/shshang/redis-operator/service/k8s"
-	"github.com/shshang/redis-operator/service/redis"
+	"github.com/shshang/redis-operator/pkg/k8s"
+	"github.com/shshang/redis-operator/pkg/redis"
 )
 
 // RedisFailoverCheck defines the interface able to check the correct status of a redis failover

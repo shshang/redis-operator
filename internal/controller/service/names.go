@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 
-	redisfailoverv1 "github.com/shshang/redis-operator/api/redisfailover/v1"
+	redisfailoverv1 "github.com/shshang/redis-operator/api/v1"
 )
 
 // GetRedisShutdownConfigMapName returns the name for redis configmap

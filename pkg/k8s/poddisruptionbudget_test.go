@@ -15,7 +15,7 @@ import (
 
 	"github.com/shshang/redis-operator/log"
 	"github.com/shshang/redis-operator/metrics"
-	"github.com/shshang/redis-operator/service/k8s"
+	"github.com/shshang/redis-operator/pkg/k8s"
 )
 
 var podDisruptionBudgetsGroup = schema.GroupVersionResource{Group: "policy", Version: "v1", Resource: "poddisruptionbudgets"}
